@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Our Repo</title>
+    <script>
+      const svgNamespace = "http://www.w3.org/2000/svg";
+      const files = {
+        files: [
+          {
+            name: "README.md",
+            size: 10,
+            commits: 1,
+            lastCommit: 120,
+          },
+        ],
+        folders: [
+          {
+            name: "src",
+            files: [],
+            folders: [
+              {
+                name: "console",
+                files: [
+                  {
+                    name: "Bootstrapper.cs",
+                    size: 120,
+                    commits: 1,
+                    lastCommit: 100,
+                  },
+                  {
+                    name: "Program.cs",
+                    size: 20,
+                    commits: 5,
+                    lastCommit: 60,
+                  },
+                ],
+                folders: [],
+              },
+              {
+                name: "domain",
+                files: [
+                  {
+                    name: "Model.cs",
+                    size: 150,
+                    commits: 1,
+                    lastCommit: 10,
+                  },
+                  {
+                    name: "Context.cs",
+                    size: 20,
+                    commits: 5,
+                    lastCommit: 6,
+                  },
+                ],
+                folders: [],
+              },
+            ],
+          },
+        ],
+      };
+    </script>
+    <script>
+      function createFile(file, id) {
+        const radius = 40;
+
+        const fileG = document.createElementNS(svgNamespace, "g");
+        fileG.setAttribute("class", "file");
+
+        const path = document.createElementNS(svgNamespace, "path");
+        const idString = `file_${id.toString(2)}`;
+        path.setAttribute("id", idString);
+        path.setAttribute("fill", "green");
+        path.setAttribute(
+          "d",
+          `M 0 ${radius} A ${radius} ${radius} 0 1 1 0 ${radius + 1}`
+        );
+
+        fileG.appendChild(path);
+
+        const text = document.createElementNS(svgNamespace, "text");
+        const textPath = document.createElementNS(svgNamespace, "textPath");
+        textPath.setAttribute("href", `#${idString}`);
+        textPath.innerHTML = file.name;
+        text.appendChild(textPath);
+
+        fileG.appendChild(text);
+
+        return fileG;
+      }
+    </script>
+    <!-- <script>
+      setInterval(() => {
+        window.location.reload();
+      }, 5000);
+    </script> -->
+    <style>
+      svg {
+        width: 100%;
+        border: 1px solid black;
+        background-color: burlywood;
+      }
+      .file text {
+        fill: black;
+        font-size: 10px;
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Files Demo</h1>
+    <svg id="repoView"></svg>
+
+    <script>
+      let id = 0;
+      const svg = document.getElementById("repoView");
+
+      const g = document.createElementNS(svgNamespace, "g");
+      g.setAttribute("transform", "translate(10, 10)");
+      svg.appendChild(g);
+
+      const repo = files;
+      for (const file of repo.files) {
+        //create a string for the id number, converted to binary format
+        id += 1;
+
+        const fileG = createFile(file, id);
+
+        g.appendChild(fileG);
+
+        const width = 400;
+        const height = 400;
+        svg.setAttribute("width", width);
+        svg.setAttribute("height", height);
+      }
+    </script>
+  </body>
+</html>
