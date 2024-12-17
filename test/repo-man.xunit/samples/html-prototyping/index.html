@@ -4,6 +4,7 @@
     <title>Our Repo</title>
     <script>
       const svgNamespace = "http://www.w3.org/2000/svg";
+      let id = 0;
       const files = {
         files: [
           {
@@ -66,14 +67,14 @@
       };
     </script>
     <script>
-      function createFile(file, id, startingX) {
+      function createFile(file, id, startingX, startingY) {
         const radius = 40;
 
         const fileG = document.createElementNS(svgNamespace, "g");
         fileG.setAttribute("class", "file");
 
         const path = document.createElementNS(svgNamespace, "path");
-        const idString = `file_${id.toString(2)}`;
+        const idString = `file_${id.toString(16)}`;
         path.setAttribute("id", idString);
         path.setAttribute("fill", "green");
         path.setAttribute(
@@ -93,8 +94,9 @@
 
         fileG.appendChild(text);
         const newStartingX = startingX + radius * 2 + 10;
+        const maxY = startingY + radius * 2 + 10;
 
-        return { fileG, newStartingX };
+        return { fileG, newStartingX, maxY };
       }
     </script>
     <!-- <script>
@@ -104,7 +106,6 @@
     </script> -->
     <style>
       svg {
-        width: 100%;
         border: 1px solid black;
         background-color: burlywood;
       }
@@ -120,7 +121,6 @@
     <svg id="repoView"></svg>
 
     <script>
-      let id = 0;
       const svg = document.getElementById("repoView");
 
       const g = document.createElementNS(svgNamespace, "g");
@@ -129,21 +129,38 @@
 
       const repo = files;
       let startingX = 0;
+      let startingY = 0;
+      let rowMaxY = 0;
+      let maxX = 0;
+
       for (const file of repo.files) {
-        //create a string for the id number, converted to binary format
         id += 1;
 
-        const { fileG, newStartingX } = createFile(file, id, startingX);
+        const { fileG, newStartingX, maxY } = createFile(
+          file,
+          id,
+          startingX,
+          startingY
+        );
 
         startingX = newStartingX;
+        rowMaxY = Math.max(rowMaxY, maxY);
 
         g.appendChild(fileG);
-
-        const width = 400;
-        const height = 400;
-        svg.setAttribute("width", width);
-        svg.setAttribute("height", height);
       }
+
+      maxX = startingX + 10;
+
+      for (const folder of repo.folders) {
+        //create the g
+        //create the files and add them to the group
+        //create the rectangle and add them to the group
+      }
+
+      const width = maxX;
+      const height = 400;
+      svg.setAttribute("width", width);
+      svg.setAttribute("height", height);
     </script>
   </body>
 </html>
