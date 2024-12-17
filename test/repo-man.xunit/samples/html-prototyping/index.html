@@ -12,6 +12,12 @@
             commits: 1,
             lastCommit: 120,
           },
+          {
+            name: "GettingStarted.md",
+            size: 20,
+            commits: 2,
+            lastCommit: 100,
+          },
         ],
         folders: [
           {
@@ -60,7 +66,7 @@
       };
     </script>
     <script>
-      function createFile(file, id) {
+      function createFile(file, id, startingX) {
         const radius = 40;
 
         const fileG = document.createElementNS(svgNamespace, "g");
@@ -72,7 +78,9 @@
         path.setAttribute("fill", "green");
         path.setAttribute(
           "d",
-          `M 0 ${radius} A ${radius} ${radius} 0 1 1 0 ${radius + 1}`
+          `M ${startingX} ${radius} A ${radius} ${radius} 0 1 1 ${startingX} ${
+            radius + 1
+          }`
         );
 
         fileG.appendChild(path);
@@ -84,8 +92,9 @@
         text.appendChild(textPath);
 
         fileG.appendChild(text);
+        const newStartingX = startingX + radius * 2 + 10;
 
-        return fileG;
+        return { fileG, newStartingX };
       }
     </script>
     <!-- <script>
@@ -119,11 +128,14 @@
       svg.appendChild(g);
 
       const repo = files;
+      let startingX = 0;
       for (const file of repo.files) {
         //create a string for the id number, converted to binary format
         id += 1;
 
-        const fileG = createFile(file, id);
+        const { fileG, newStartingX } = createFile(file, id, startingX);
+
+        startingX = newStartingX;
 
         g.appendChild(fileG);
 
