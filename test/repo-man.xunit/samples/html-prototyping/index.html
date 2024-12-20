@@ -21,46 +21,40 @@
         ],
         folders: [
           {
-            name: "src",
-            files: [],
-            folders: [
+            name: "console",
+            files: [
               {
-                name: "console",
-                files: [
-                  {
-                    name: "Bootstrapper.cs",
-                    size: 120,
-                    commits: 1,
-                    lastCommit: 100,
-                  },
-                  {
-                    name: "Program.cs",
-                    size: 20,
-                    commits: 5,
-                    lastCommit: 60,
-                  },
-                ],
-                folders: [],
+                name: "Bootstrapper.cs",
+                size: 120,
+                commits: 1,
+                lastCommit: 100,
               },
               {
-                name: "domain",
-                files: [
-                  {
-                    name: "Model.cs",
-                    size: 150,
-                    commits: 1,
-                    lastCommit: 10,
-                  },
-                  {
-                    name: "Context.cs",
-                    size: 20,
-                    commits: 5,
-                    lastCommit: 6,
-                  },
-                ],
-                folders: [],
+                name: "Program.cs",
+                size: 20,
+                commits: 5,
+                lastCommit: 60,
               },
             ],
+            folders: [],
+          },
+          {
+            name: "domain",
+            files: [
+              {
+                name: "Model.cs",
+                size: 150,
+                commits: 1,
+                lastCommit: 10,
+              },
+              {
+                name: "Context.cs",
+                size: 20,
+                commits: 5,
+                lastCommit: 6,
+              },
+            ],
+            folders: [],
           },
         ],
       };
@@ -170,9 +164,21 @@
         g.appendChild(folderG);
 
         //create the files and add them to the group
-        const folderResult = writeFiles(folder.files, folderG, startingX, 0);
-
+        const folderResult = writeFiles(folder.files, folderG, startingX + 10, 0);
+        
         //create the rectangle and add them to the group
+        const rect = document.createElementNS(svgNamespace, "rect");
+        rect.setAttribute("x", startingX);
+        rect.setAttribute("y", 0);
+        rect.setAttribute("width", folderResult.maxX - startingX);
+        rect.setAttribute("height", folderResult.rowMaxY);
+        rect.setAttribute("fill", "none");
+        rect.setAttribute("stroke", "black");
+
+        folderG.appendChild(rect);
+
+        maxX = Math.max(maxX, folderResult.maxX);
+        rowMaxY += folderResult.rowMaxY;
       }
 
       const width = maxX;
