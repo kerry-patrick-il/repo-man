@@ -4,8 +4,7 @@
     <title>Our Repo</title>
     <script>
       const svgNamespace = "http://www.w3.org/2000/svg";
-      let id = 0;
-      const files = {
+      const repoInfo = {
         files: [
           {
             name: "README.md",
@@ -67,6 +66,8 @@
       };
     </script>
     <script>
+      let id = 0;
+
       function createFile(file, id, startingX, startingY) {
         const radius = 40;
 
@@ -98,6 +99,31 @@
 
         return { fileG, newStartingX, maxY };
       }
+
+      function writeFiles(files, g, startingX, startingY) {
+        let maxX = startingX;
+        let rowMaxY = startingY;
+
+        for (const file of files) {
+          id += 1;
+
+          const { fileG, newStartingX, maxY } = createFile(
+            file,
+            id,
+            startingX,
+            startingY
+          );
+
+          startingX = newStartingX;
+          rowMaxY = Math.max(rowMaxY, maxY);
+
+          g.appendChild(fileG);
+        }
+
+        maxX = startingX + 10;
+
+        return { maxX, rowMaxY };
+      }
     </script>
     <!-- <script>
       setInterval(() => {
@@ -127,33 +153,25 @@
       g.setAttribute("transform", "translate(10, 10)");
       svg.appendChild(g);
 
-      const repo = files;
       let startingX = 0;
       let startingY = 0;
-      let rowMaxY = 0;
-      let maxX = 0;
 
-      for (const file of repo.files) {
-        id += 1;
+      const files = repoInfo.files;
 
-        const { fileG, newStartingX, maxY } = createFile(
-          file,
-          id,
-          startingX,
-          startingY
-        );
+      const fileResult = writeFiles(repoInfo.files, g, startingX, startingY);
 
-        startingX = newStartingX;
-        rowMaxY = Math.max(rowMaxY, maxY);
+      let maxX = fileResult.maxX;
+      let rowMaxY = fileResult.rowMaxY;
 
-        g.appendChild(fileG);
-      }
-
-      maxX = startingX + 10;
-
-      for (const folder of repo.folders) {
+      for (const folder of repoInfo.folders) {
         //create the g
+        const folderG = document.createElementNS(svgNamespace, "g");
+        folderG.setAttribute("transform", `translate(0, ${rowMaxY + 10})`);
+        g.appendChild(folderG);
+
         //create the files and add them to the group
+        const folderResult = writeFiles(folder.files, folderG, startingX, 0);
+
         //create the rectangle and add them to the group
       }
 
