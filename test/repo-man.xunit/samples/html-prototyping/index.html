@@ -147,18 +147,13 @@
         );
         g.appendChild(folderG);
 
-        const folderResult = writeFiles(
-          folder.files,
-          folderG,
-          startingX + 10,
-          0
-        );
+        const folderResult = writeFiles(folder.files, folderG, 10, 0);
 
         for (const subfolder of folder.folders ?? []) {
           const subfolderResult = createFolder(
             subfolder,
             folderG,
-            5,
+            10,
             folderResult.rowMaxY + 10
           );
           folderResult.maxX = Math.max(folderResult.maxX, subfolderResult.maxX);
@@ -166,7 +161,7 @@
         }
 
         const rect = document.createElementNS(svgNamespace, "rect");
-        rect.setAttribute("x", startingX);
+        rect.setAttribute("x", 0);
         rect.setAttribute("y", -10);
         rect.setAttribute("width", folderResult.maxX - 10);
         rect.setAttribute("height", folderResult.rowMaxY + 10);
