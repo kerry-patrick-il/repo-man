@@ -131,7 +131,7 @@
         border: 1px solid black;
         background-color: burlywood;
       }
-      .file text {
+      text {
         fill: black;
         font-size: 10px;
         font-family: sans-serif;
@@ -183,6 +183,12 @@
         rect.setAttribute("stroke", "black");
 
         folderG.appendChild(rect);
+
+        const text = document.createElementNS(svgNamespace, "text");
+        text.innerHTML = folder.name;
+        text.setAttribute("fill", "black");
+        text.setAttribute("transform", "translate(0, -12)");
+        folderG.appendChild(text);
 
         maxX = Math.max(maxX, folderResult.maxX);
         rowMaxY += folderResult.rowMaxY + 10 + 20;
