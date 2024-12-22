@@ -173,7 +173,7 @@
         const text = document.createElementNS(svgNamespace, "text");
         text.innerHTML = folder.name;
         text.setAttribute("fill", "black");
-        text.setAttribute("transform", `translate(${startingX}, -12)`);
+        text.setAttribute("transform", `translate(0, -12)`);
         folderG.appendChild(text);
 
         return {
