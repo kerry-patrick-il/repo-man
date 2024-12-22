@@ -134,7 +134,7 @@
           g.appendChild(fileG);
         }
 
-        maxX = startingX + 10;
+        maxX = startingX;
 
         return { maxX, rowMaxY };
       }
@@ -163,7 +163,7 @@
         const rect = document.createElementNS(svgNamespace, "rect");
         rect.setAttribute("x", 0);
         rect.setAttribute("y", -10);
-        rect.setAttribute("width", folderResult.maxX - 10);
+        rect.setAttribute("width", folderResult.maxX);
         rect.setAttribute("height", folderResult.rowMaxY + 10);
         rect.setAttribute("fill", "none");
         rect.setAttribute("stroke", "black");
@@ -177,7 +177,7 @@
         folderG.appendChild(text);
 
         return {
-          maxX: folderResult.maxX + 10,
+          maxX: folderResult.maxX + startingX + 10,
           rowMaxY: folderResult.rowMaxY + 10 + 20,
         };
       }
