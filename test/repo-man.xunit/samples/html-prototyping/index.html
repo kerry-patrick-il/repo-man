@@ -141,7 +141,10 @@
 
       function createFolder(folder, g, startingX, rowMaxY) {
         const folderG = document.createElementNS(svgNamespace, "g");
-        folderG.setAttribute("transform", `translate(0, ${rowMaxY + 10})`);
+        folderG.setAttribute(
+          "transform",
+          `translate(${startingX}, ${rowMaxY + 10})`
+        );
         g.appendChild(folderG);
 
         const folderResult = writeFiles(
@@ -151,10 +154,21 @@
           0
         );
 
+        for (const subfolder of folder.folders ?? []) {
+          const subfolderResult = createFolder(
+            subfolder,
+            folderG,
+            5,
+            folderResult.rowMaxY + 10
+          );
+          folderResult.maxX = Math.max(folderResult.maxX, subfolderResult.maxX);
+          folderResult.rowMaxY += subfolderResult.rowMaxY;
+        }
+
         const rect = document.createElementNS(svgNamespace, "rect");
         rect.setAttribute("x", startingX);
         rect.setAttribute("y", -10);
-        rect.setAttribute("width", folderResult.maxX - startingX - 10);
+        rect.setAttribute("width", folderResult.maxX - 10);
         rect.setAttribute("height", folderResult.rowMaxY + 10);
         rect.setAttribute("fill", "none");
         rect.setAttribute("stroke", "black");
@@ -164,11 +178,11 @@
         const text = document.createElementNS(svgNamespace, "text");
         text.innerHTML = folder.name;
         text.setAttribute("fill", "black");
-        text.setAttribute("transform", "translate(0, -12)");
+        text.setAttribute("transform", `translate(${startingX}, -12)`);
         folderG.appendChild(text);
 
         return {
-          maxX: folderResult.maxX,
+          maxX: folderResult.maxX + 10,
           rowMaxY: folderResult.rowMaxY + 10 + 20,
         };
       }
@@ -199,6 +213,7 @@
 
       const g = document.createElementNS(svgNamespace, "g");
       g.setAttribute("transform", "translate(10, 10)");
+      g.setAttribute("id", "top-level");
       svg.appendChild(g);
 
       let startingX = 0;
@@ -218,7 +233,7 @@
       }
 
       const width = maxX + 20;
-      const height = 400;
+      const height = rowMaxY;
       svg.setAttribute("width", width);
       svg.setAttribute("height", height);
     </script>
