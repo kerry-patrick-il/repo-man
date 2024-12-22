@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<!-- todo:
+ - calculate radius of circle -->
 <html lang="en">
   <head>
     <title>Our Repo</title>
     <script>
-      const svgNamespace = "http://www.w3.org/2000/svg";
       const repoInfo = {
         files: [
           {
@@ -60,6 +61,7 @@
       };
     </script>
     <script>
+      const svgNamespace = "http://www.w3.org/2000/svg";
       let id = 0;
 
       function createFile(file, id, startingX, startingY) {
@@ -164,24 +166,29 @@
         g.appendChild(folderG);
 
         //create the files and add them to the group
-        const folderResult = writeFiles(folder.files, folderG, startingX + 10, 0);
-        
+        const folderResult = writeFiles(
+          folder.files,
+          folderG,
+          startingX + 10,
+          0
+        );
+
         //create the rectangle and add them to the group
         const rect = document.createElementNS(svgNamespace, "rect");
         rect.setAttribute("x", startingX);
-        rect.setAttribute("y", 0);
-        rect.setAttribute("width", folderResult.maxX - startingX);
-        rect.setAttribute("height", folderResult.rowMaxY);
+        rect.setAttribute("y", -10);
+        rect.setAttribute("width", folderResult.maxX - startingX - 10);
+        rect.setAttribute("height", folderResult.rowMaxY + 10);
         rect.setAttribute("fill", "none");
         rect.setAttribute("stroke", "black");
 
         folderG.appendChild(rect);
 
         maxX = Math.max(maxX, folderResult.maxX);
-        rowMaxY += folderResult.rowMaxY;
+        rowMaxY += folderResult.rowMaxY + 10 + 20;
       }
 
-      const width = maxX;
+      const width = maxX + 20;
       const height = 400;
       svg.setAttribute("width", width);
       svg.setAttribute("height", height);
