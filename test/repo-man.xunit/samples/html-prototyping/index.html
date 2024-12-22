@@ -55,7 +55,25 @@
                 lastCommit: 6,
               },
             ],
-            folders: [],
+            folders: [
+              {
+                name: "mappers",
+                files: [
+                  {
+                    name: "ModelMapper.cs",
+                    size: 150,
+                    commits: 1,
+                    lastCommit: 10,
+                  },
+                  {
+                    name: "ContextMapper.cs",
+                    size: 20,
+                    commits: 5,
+                    lastCommit: 6,
+                  },
+                ],
+              },
+            ],
           },
         ],
       };
@@ -120,6 +138,40 @@
 
         return { maxX, rowMaxY };
       }
+
+      function createFolder(folder, g, startingX, rowMaxY) {
+        const folderG = document.createElementNS(svgNamespace, "g");
+        folderG.setAttribute("transform", `translate(0, ${rowMaxY + 10})`);
+        g.appendChild(folderG);
+
+        const folderResult = writeFiles(
+          folder.files,
+          folderG,
+          startingX + 10,
+          0
+        );
+
+        const rect = document.createElementNS(svgNamespace, "rect");
+        rect.setAttribute("x", startingX);
+        rect.setAttribute("y", -10);
+        rect.setAttribute("width", folderResult.maxX - startingX - 10);
+        rect.setAttribute("height", folderResult.rowMaxY + 10);
+        rect.setAttribute("fill", "none");
+        rect.setAttribute("stroke", "black");
+
+        folderG.appendChild(rect);
+
+        const text = document.createElementNS(svgNamespace, "text");
+        text.innerHTML = folder.name;
+        text.setAttribute("fill", "black");
+        text.setAttribute("transform", "translate(0, -12)");
+        folderG.appendChild(text);
+
+        return {
+          maxX: folderResult.maxX,
+          rowMaxY: folderResult.rowMaxY + 10 + 20,
+        };
+      }
     </script>
     <!-- <script>
       setInterval(() => {
@@ -160,38 +212,9 @@
       let rowMaxY = fileResult.rowMaxY;
 
       for (const folder of repoInfo.folders) {
-        //create the g
-        const folderG = document.createElementNS(svgNamespace, "g");
-        folderG.setAttribute("transform", `translate(0, ${rowMaxY + 10})`);
-        g.appendChild(folderG);
-
-        //create the files and add them to the group
-        const folderResult = writeFiles(
-          folder.files,
-          folderG,
-          startingX + 10,
-          0
-        );
-
-        //create the rectangle and add them to the group
-        const rect = document.createElementNS(svgNamespace, "rect");
-        rect.setAttribute("x", startingX);
-        rect.setAttribute("y", -10);
-        rect.setAttribute("width", folderResult.maxX - startingX - 10);
-        rect.setAttribute("height", folderResult.rowMaxY + 10);
-        rect.setAttribute("fill", "none");
-        rect.setAttribute("stroke", "black");
-
-        folderG.appendChild(rect);
-
-        const text = document.createElementNS(svgNamespace, "text");
-        text.innerHTML = folder.name;
-        text.setAttribute("fill", "black");
-        text.setAttribute("transform", "translate(0, -12)");
-        folderG.appendChild(text);
-
+        const folderResult = createFolder(folder, g, startingX, rowMaxY);
         maxX = Math.max(maxX, folderResult.maxX);
-        rowMaxY += folderResult.rowMaxY + 10 + 20;
+        rowMaxY += folderResult.rowMaxY;
       }
 
       const width = maxX + 20;
