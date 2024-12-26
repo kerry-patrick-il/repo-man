@@ -137,8 +137,16 @@
       const svgNamespace = "http://www.w3.org/2000/svg";
       let id = 0;
 
+      function getRadius(file){
+        return 40;
+      }
+
+      function getColor(file){
+        return "green";
+      }
+
       function createFile(file, id, startingX, startingY) {
-        const radius = 40;
+        const radius = getRadius(file);
 
         const fileG = document.createElementNS(svgNamespace, "g");
         fileG.setAttribute("class", "file");
@@ -146,7 +154,7 @@
         const path = document.createElementNS(svgNamespace, "path");
         const idString = `file_${id.toString(16)}`;
         path.setAttribute("id", idString);
-        path.setAttribute("fill", "green");
+        path.setAttribute("fill", getColor(file));
         path.setAttribute(
           "d",
           `M ${startingX} ${radius} A ${radius} ${radius} 0 1 1 ${startingX} ${
