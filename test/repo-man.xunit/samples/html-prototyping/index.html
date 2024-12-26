@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <title>Our Repo</title>
-    <script>
+    <script id="repo-file-data">
       const repoInfo = {
         files: [
           {
@@ -133,7 +133,7 @@
         ],
       };
     </script>
-    <script>
+    <script id="file-size-logic">
       const maxFileSize = getMaxFileSize(repoInfo);
       const minFileSize = getMinFileSize(repoInfo);
       let minRSquared = 144,
@@ -167,7 +167,7 @@
         return Math.sqrt(rSquared);
       }
     </script>
-    <script>
+    <script id="file-folder-svg-elements">
       const svgNamespace = "http://www.w3.org/2000/svg";
       let id = 0;
 
@@ -300,7 +300,7 @@
     <h1>Files Demo</h1>
     <svg id="repoView"></svg>
 
-    <script>
+    <script id="build-the-diagram">
       const svg = document.getElementById("repoView");
 
       const g = document.createElementNS(svgNamespace, "g");
@@ -324,10 +324,8 @@
         rowMaxY += folderResult.rowMaxY;
       }
 
-      const width = maxX + 10;
-      const height = rowMaxY;
-      svg.setAttribute("width", width);
-      svg.setAttribute("height", height);
+      svg.setAttribute("width", maxX + 10);
+      svg.setAttribute("height", rowMaxY);
     </script>
   </body>
 </html>
