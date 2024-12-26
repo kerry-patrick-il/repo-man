@@ -167,6 +167,25 @@
         return Math.sqrt(rSquared);
       }
     </script>
+    <script id="file-extension-logic">
+      
+      function getFileExtension(fileName) {
+        if(fileName.includes('.')) {
+          return fileName.split('.').pop();
+        }
+        return fileName;       
+      }
+
+      function getColorByFileExtension(file) {
+        return "blue";
+      }
+
+      function getStaticColor(file) {
+        return "blue";
+      }
+
+      
+    </script>
     <script id="file-folder-svg-elements">
       const svgNamespace = "http://www.w3.org/2000/svg";
       let id = 0;
@@ -176,7 +195,7 @@
       }
 
       function getColor(file) {
-        return "green";
+        return getStaticColor(file);
       }
 
       function createFile(file, id, startingX, startingY) {
