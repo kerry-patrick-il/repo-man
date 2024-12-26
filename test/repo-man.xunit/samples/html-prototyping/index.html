@@ -134,27 +134,48 @@
       };
     </script>
     <script>
-      const svgNamespace = "http://www.w3.org/2000/svg";
-      let id = 0;
       const maxFileSize = getMaxFileSize(repoInfo);
-      const minFileSize = getMinFileSize(repoInfo);      
-      let minRSquared = 100, maxRSquared = 10000;
+      const minFileSize = getMinFileSize(repoInfo);
+      let minRSquared = 144,
+        maxRSquared = 10000;
 
       function getMaxFileSize(repoInfo) {
-        return Math.max(0,...repoInfo.files?.map(f => f.size) ?? [], ...repoInfo.folders?.flatMap(folder => getMaxFileSize(folder)) ?? []);
+        return Math.max(
+          0,
+          ...(repoInfo.files?.map((f) => f.size) ?? []),
+          ...(repoInfo.folders?.flatMap((folder) => getMaxFileSize(folder)) ??
+            [])
+        );
       }
 
       function getMinFileSize(repoInfo) {
-        return Math.min(...repoInfo.files?.map(f => f.size) ?? [], ...repoInfo.folders?.flatMap(folder => getMaxFileSize(folder)) ?? []) ?? 0;
+        return (
+          Math.min(
+            ...(repoInfo.files?.map((f) => f.size) ?? []),
+            ...(repoInfo.folders?.flatMap((folder) => getMaxFileSize(folder)) ??
+              [])
+          ) ?? 0
+        );
       }
 
-      function getRadius(file){
-        if(minFileSize === maxFileSize) return 0;
-        const rSquared = (file.size * (maxRSquared - minRSquared) / (maxFileSize - minFileSize)) + minRSquared;        
+      function getFileSizeRadius(file) {
+        if (minFileSize === maxFileSize) return 0;
+        const rSquared =
+          (file.size * (maxRSquared - minRSquared)) /
+            (maxFileSize - minFileSize) +
+          minRSquared;
         return Math.sqrt(rSquared);
       }
+    </script>
+    <script>
+      const svgNamespace = "http://www.w3.org/2000/svg";
+      let id = 0;
 
-      function getColor(file){
+      function getRadius(file) {
+        return getFileSizeRadius(file);
+      }
+
+      function getColor(file) {
         return "green";
       }
 
@@ -279,7 +300,7 @@
     <h1>Files Demo</h1>
     <svg id="repoView"></svg>
 
-    <script>      
+    <script>
       const svg = document.getElementById("repoView");
 
       const g = document.createElementNS(svgNamespace, "g");
