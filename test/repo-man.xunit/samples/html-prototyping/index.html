@@ -78,7 +78,7 @@
                     files: [
                       {
                         name: "ModelMapperImpl.cs",
-                        size: 150,
+                        size: 1500,
                         commits: 1,
                         lastCommit: 10,
                       },
@@ -136,9 +136,22 @@
     <script>
       const svgNamespace = "http://www.w3.org/2000/svg";
       let id = 0;
+      const maxFileSize = getMaxFileSize(repoInfo);
+      const minFileSize = getMinFileSize(repoInfo);      
+      let minRSquared = 100, maxRSquared = 10000;
+
+      function getMaxFileSize(repoInfo) {
+        return Math.max(0,...repoInfo.files?.map(f => f.size) ?? [], ...repoInfo.folders?.flatMap(folder => getMaxFileSize(folder)) ?? []);
+      }
+
+      function getMinFileSize(repoInfo) {
+        return Math.min(...repoInfo.files?.map(f => f.size) ?? [], ...repoInfo.folders?.flatMap(folder => getMaxFileSize(folder)) ?? []) ?? 0;
+      }
 
       function getRadius(file){
-        return 40;
+        if(minFileSize === maxFileSize) return 0;
+        const rSquared = (file.size * (maxRSquared - minRSquared) / (maxFileSize - minFileSize)) + minRSquared;        
+        return Math.sqrt(rSquared);
       }
 
       function getColor(file){
@@ -266,7 +279,7 @@
     <h1>Files Demo</h1>
     <svg id="repoView"></svg>
 
-    <script>
+    <script>      
       const svg = document.getElementById("repoView");
 
       const g = document.createElementNS(svgNamespace, "g");
