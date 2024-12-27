@@ -1,0 +1,180 @@
+import repoInfo from "./data/repo-data";
+
+const maxFileSize = getMaxFileSize(repoInfo);
+const minFileSize = getMinFileSize(repoInfo);
+const minRSquared = 144;
+const maxRSquared = 10000;
+
+function getMaxFileSize(repoInfo) {
+  return Math.max(
+    0,
+    ...(repoInfo.files?.map((f) => f.size) ?? []),
+    ...(repoInfo.folders?.flatMap((folder) => getMaxFileSize(folder)) ?? [])
+  );
+}
+
+function getMinFileSize(repoInfo) {
+  return (
+    Math.min(
+      ...(repoInfo.files?.map((f) => f.size) ?? []),
+      ...(repoInfo.folders?.flatMap((folder) => getMaxFileSize(folder)) ?? [])
+    ) ?? 0
+  );
+}
+
+function getFileSizeRadius(file) {
+  if (minFileSize === maxFileSize) return 0;
+  const rSquared =
+    (file.size * (maxRSquared - minRSquared)) / (maxFileSize - minFileSize) +
+    minRSquared;
+  return Math.sqrt(rSquared);
+}
+
+function getFileExtension(fileName) {
+  if (fileName.includes(".")) {
+    return fileName.split(".").pop();
+  }
+  return fileName;
+}
+
+function getColorByFileExtension(file) {
+  return "blue";
+}
+
+function getStaticColor(file) {
+  return "blue";
+}
+
+const svgNamespace = "http://www.w3.org/2000/svg";
+let id = 0;
+
+function getRadius(file) {
+  return getFileSizeRadius(file);
+}
+
+function getColor(file) {
+  return getStaticColor(file);
+}
+
+function createFile(file, id, startingX, startingY) {
+  const radius = getRadius(file);
+
+  const fileG = document.createElementNS(svgNamespace, "g");
+  fileG.setAttribute("class", "file");
+
+  const path = document.createElementNS(svgNamespace, "path");
+  const idString = `file_${id.toString(16)}`;
+  path.setAttribute("id", idString);
+  path.setAttribute("fill", getColor(file));
+  path.setAttribute(
+    "d",
+    `M ${startingX} ${radius} A ${radius} ${radius} 0 1 1 ${startingX} ${
+      radius + 1
+    }`
+  );
+
+  fileG.appendChild(path);
+
+  const text = document.createElementNS(svgNamespace, "text");
+  const textPath = document.createElementNS(svgNamespace, "textPath");
+  textPath.setAttribute("href", `#${idString}`);
+  textPath.innerHTML = file.name;
+  text.appendChild(textPath);
+
+  fileG.appendChild(text);
+  const newStartingX = startingX + radius * 2 + 10;
+  const maxY = startingY + radius * 2 + 10;
+
+  return { fileG, newStartingX, maxY };
+}
+
+function writeFiles(files, g, startingX, startingY) {
+  let maxX = startingX;
+  let rowMaxY = startingY;
+
+  for (const file of files) {
+    id += 1;
+
+    const { fileG, newStartingX, maxY } = createFile(
+      file,
+      id,
+      startingX,
+      startingY
+    );
+
+    startingX = newStartingX;
+    rowMaxY = Math.max(rowMaxY, maxY);
+
+    g.appendChild(fileG);
+  }
+
+  maxX = startingX;
+
+  return { maxX, rowMaxY };
+}
+
+function createFolder(folder, g, startingX, rowMaxY) {
+  const folderG = document.createElementNS(svgNamespace, "g");
+  folderG.setAttribute("transform", `translate(${startingX}, ${rowMaxY + 10})`);
+  g.appendChild(folderG);
+
+  const folderResult = writeFiles(folder.files, folderG, 10, 0);
+
+  for (const subfolder of folder.folders ?? []) {
+    const subfolderResult = createFolder(
+      subfolder,
+      folderG,
+      10,
+      folderResult.rowMaxY + 10
+    );
+    folderResult.maxX = Math.max(folderResult.maxX, subfolderResult.maxX);
+    folderResult.rowMaxY += subfolderResult.rowMaxY;
+  }
+
+  const rect = document.createElementNS(svgNamespace, "rect");
+  rect.setAttribute("x", 0);
+  rect.setAttribute("y", -10);
+  rect.setAttribute("width", folderResult.maxX);
+  rect.setAttribute("height", folderResult.rowMaxY + 10);
+  rect.setAttribute("fill", "none");
+  rect.setAttribute("stroke", "black");
+
+  folderG.appendChild(rect);
+
+  const text = document.createElementNS(svgNamespace, "text");
+  text.innerHTML = folder.name;
+  text.setAttribute("fill", "black");
+  text.setAttribute("transform", `translate(0, -12)`);
+  folderG.appendChild(text);
+
+  return {
+    maxX: folderResult.maxX + startingX + 10,
+    rowMaxY: folderResult.rowMaxY + 10 + 20,
+  };
+}
+
+const svg = document.getElementById("repoView");
+
+const g = document.createElementNS(svgNamespace, "g");
+g.setAttribute("transform", "translate(10, 10)");
+g.setAttribute("id", "top-level");
+svg.appendChild(g);
+
+let startingX = 0;
+let startingY = 0;
+
+const files = repoInfo.files;
+
+const fileResult = writeFiles(repoInfo.files, g, startingX, startingY);
+
+let maxX = fileResult.maxX;
+let rowMaxY = fileResult.rowMaxY;
+
+for (const folder of repoInfo.folders) {
+  const folderResult = createFolder(folder, g, startingX, rowMaxY);
+  maxX = Math.max(maxX, folderResult.maxX);
+  rowMaxY += folderResult.rowMaxY;
+}
+
+svg.setAttribute("width", maxX + 10);
+svg.setAttribute("height", rowMaxY);
