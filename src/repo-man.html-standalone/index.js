@@ -1,34 +1,6 @@
 import repoInfo from "./data/repo-data";
-
-const maxFileSize = getMaxFileSize(repoInfo);
-const minFileSize = getMinFileSize(repoInfo);
-const minRSquared = 144;
-const maxRSquared = 10000;
-
-function getMaxFileSize(repoInfo) {
-  return Math.max(
-    0,
-    ...(repoInfo.files?.map((f) => f.size) ?? []),
-    ...(repoInfo.folders?.flatMap((folder) => getMaxFileSize(folder)) ?? [])
-  );
-}
-
-function getMinFileSize(repoInfo) {
-  return (
-    Math.min(
-      ...(repoInfo.files?.map((f) => f.size) ?? []),
-      ...(repoInfo.folders?.flatMap((folder) => getMaxFileSize(folder)) ?? [])
-    ) ?? 0
-  );
-}
-
-function getFileSizeRadius(file) {
-  if (minFileSize === maxFileSize) return 0;
-  const rSquared =
-    (file.size * (maxRSquared - minRSquared)) / (maxFileSize - minFileSize) +
-    minRSquared;
-  return Math.sqrt(rSquared);
-}
+import { svgNamespace } from "./scripts/constants";
+import { getFileSizeRadius } from "./scripts/fileSize";
 
 function getFileExtension(fileName) {
   if (fileName.includes(".")) {
@@ -45,7 +17,6 @@ function getStaticColor(file) {
   return "blue";
 }
 
-const svgNamespace = "http://www.w3.org/2000/svg";
 let id = 0;
 
 function getRadius(file) {
