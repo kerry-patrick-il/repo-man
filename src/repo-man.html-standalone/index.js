@@ -153,28 +153,28 @@ function createFolder(folder, g, startingX, rowMaxY) {
   };
 }
 
-const svg = document.getElementById("repoView");
+window.addEventListener("load", () => {
+  const svg = document.getElementById("repoView");
 
-const g = document.createElementNS(svgNamespace, "g");
-g.setAttribute("transform", "translate(10, 10)");
-g.setAttribute("id", "top-level");
-svg.appendChild(g);
+  const g = document.createElementNS(svgNamespace, "g");
+  g.setAttribute("transform", "translate(10, 10)");
+  g.setAttribute("id", "top-level");
+  svg.appendChild(g);
 
-let startingX = 0;
-let startingY = 0;
+  let startingX = 0;
+  let startingY = 0;
 
-const files = repoInfo.files;
+  const fileResult = writeFiles(repoInfo.files, g, startingX, startingY);
 
-const fileResult = writeFiles(repoInfo.files, g, startingX, startingY);
+  let maxX = fileResult.maxX;
+  let rowMaxY = fileResult.rowMaxY;
 
-let maxX = fileResult.maxX;
-let rowMaxY = fileResult.rowMaxY;
+  for (const folder of repoInfo.folders) {
+    const folderResult = createFolder(folder, g, startingX, rowMaxY);
+    maxX = Math.max(maxX, folderResult.maxX);
+    rowMaxY += folderResult.rowMaxY;
+  }
 
-for (const folder of repoInfo.folders) {
-  const folderResult = createFolder(folder, g, startingX, rowMaxY);
-  maxX = Math.max(maxX, folderResult.maxX);
-  rowMaxY += folderResult.rowMaxY;
-}
-
-svg.setAttribute("width", maxX + 10);
-svg.setAttribute("height", rowMaxY);
+  svg.setAttribute("width", maxX + 10);
+  svg.setAttribute("height", rowMaxY);
+});
