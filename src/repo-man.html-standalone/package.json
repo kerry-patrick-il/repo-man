@@ -4,6 +4,7 @@
   "description": "Generates a standalone HTML file with inline JavaScript to generate a dynamic SVG file showing git repo file info",
   "main": "index.js",
   "scripts": {
+    "build": "webpack --config webpack.config.js",
     "test": "jest"
   },
   "author": "",

@@ -7,4 +7,5 @@ module.exports = {
     new HtmlWebpackPlugin({ template: "index.html" }),
     new HtmlInlineScriptPlugin(),
   ],
+  mode: "production",
 };
