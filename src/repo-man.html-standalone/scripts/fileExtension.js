@@ -5,6 +5,7 @@ export function getFileExtension(fileName) {
   return fileName;
 }
 
-function getColorByFileExtension(file) {
+export function getColorByFileExtension(file) {
   return "blue";
 }
+

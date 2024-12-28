@@ -31,7 +31,6 @@ window.addEventListener("load", () => {
 });
 
 /* todo: 
-- add unit tests
  - determine color of file by file extension
  - determine intensity of color by number of revisions
  - add a legend showing colors and their meanings
