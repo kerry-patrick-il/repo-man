@@ -4,7 +4,7 @@
  */
 
 /** @type {import('jest').Config} */
-const config = {
+module.exports = {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -198,4 +198,3 @@ const config = {
   // watchman: true,
 };
 
-export default config;
