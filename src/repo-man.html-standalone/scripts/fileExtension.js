@@ -1,4 +1,4 @@
-function getFileExtension(fileName) {
+export function getFileExtension(fileName) {
   if (fileName.includes(".")) {
     return fileName.split(".").pop();
   }
