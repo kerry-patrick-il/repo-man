@@ -21,9 +21,9 @@ export function getColorByFileExtension(file) {
 
 function getNewColor() {
   //get three random numbers between 0 and 255 to create a color in RGB format.
-  const r = Math.floor(Math.random() * 256);
-  const g = Math.floor(Math.random() * 256);
-  const b = Math.floor(Math.random() * 256);
+  const r = Math.floor(Math.random() * 150);
+  const g = Math.floor(Math.random() * 150);
+  const b = Math.floor(Math.random() * 150);
 
   //return the color in hexadecimal format.
   return `#${r.toString(16).padStart(2, "0")}${g
