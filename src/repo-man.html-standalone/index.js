@@ -31,7 +31,6 @@ window.addEventListener("load", () => {
 });
 
 /* todo: 
- - determine color of file by file extension
  - determine intensity of color by number of revisions
  - add a legend showing colors and their meanings
  - add a second file radius algorithm that uses number of revisions, and create a switch between the two algorithms
