@@ -1,7 +1,7 @@
 import { svgNamespace } from "./common/constants";
 import { getColorByFileExtension } from "./getColorByFileExtension";
 import { getFileSizeRadius } from "./getFileSizeRadius";
-import { getColorIntensityByFile } from "./getColorIntensityByFile";
+import { getColorIntensityByRevisions } from "./getColorIntensityByRevisions";
 
 let id = 0;
 
@@ -11,7 +11,7 @@ function getRadius(file) {
 
 function getColor(file) {
   const colorBase = getColorByFileExtension(file);
-  const intensity = getColorIntensityByFile(file);
+  const intensity = getColorIntensityByRevisions(file);
   return `${colorBase}${intensity}`;
 }
 
