@@ -1,4 +1,4 @@
-import { getMaxFileSize } from "./fileSize";
+import { getMaxFileSize } from "./getFileSizeRadius";
 
 describe("file size logic", () => {
   describe("get max file size", () => {

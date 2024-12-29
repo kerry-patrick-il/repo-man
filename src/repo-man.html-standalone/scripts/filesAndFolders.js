@@ -1,15 +1,12 @@
 import { svgNamespace } from "./common/constants";
 import { getColorByFileExtension } from "./getColorByFileExtension";
-import { getFileSizeRadius } from "./fileSize";
+import { getFileSizeRadius } from "./getFileSizeRadius";
+import { getColorIntensityByFile } from "./getColorIntensityByFile";
 
 let id = 0;
 
 function getRadius(file) {
   return getFileSizeRadius(file);
-}
-
-function getColorIntensityByFile(file) {
-  return (50).toString(16).padStart(2, "0");
 }
 
 function getColor(file) {

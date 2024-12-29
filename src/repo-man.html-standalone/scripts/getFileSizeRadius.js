@@ -2,8 +2,6 @@ import repoInfo from "../data/repo-data";
 
 const maxFileSize = getMaxFileSize(repoInfo);
 const minFileSize = getMinFileSize(repoInfo);
-const minRSquared = 144;
-const maxRSquared = 10000;
 
 export function getMaxFileSize(repoInfo) {
   return Math.max(
@@ -21,6 +19,9 @@ export function getMinFileSize(repoInfo) {
     ) ?? 0
   );
 }
+
+const minRSquared = 144;
+const maxRSquared = 10000;
 
 export function getFileSizeRadius(file) {
   if (minFileSize === maxFileSize) return 0;
