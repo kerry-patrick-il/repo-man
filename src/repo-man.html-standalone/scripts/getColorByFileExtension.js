@@ -1,9 +1,4 @@
-export function getFileExtension(fileName) {
-  if (fileName.includes(".")) {
-    return fileName.split(".").pop();
-  }
-  return fileName;
-}
+import { getFileExtension } from "./getFileExtension";
 
 const colorMap = [];
 
@@ -20,7 +15,9 @@ export function getColorByFileExtension(file) {
 }
 
 function getNewColor() {
-  //get three random numbers between 0 and 255 to create a color in RGB format.
+  // Get three random numbers between 0 and 150 to create a color in RGB format.
+  // We use lower numbers because they produce darker colors.
+  // This helps us to create a range of intensities.
   const r = Math.floor(Math.random() * 150);
   const g = Math.floor(Math.random() * 150);
   const b = Math.floor(Math.random() * 150);
@@ -30,4 +27,3 @@ function getNewColor() {
     .toString(16)
     .padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
 }
-

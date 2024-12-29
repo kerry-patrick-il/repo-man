@@ -1,5 +1,5 @@
 import { svgNamespace } from "./constants";
-import { getColorByFileExtension } from "./fileExtension";
+import { getColorByFileExtension } from "./getColorByFileExtension";
 import { getFileSizeRadius } from "./fileSize";
 
 function getStaticColor(file) {
@@ -12,8 +12,14 @@ function getRadius(file) {
   return getFileSizeRadius(file);
 }
 
+function getColorIntensityByFile(file) {
+  return (50).toString(16).padStart(2, "0");
+}
+
 function getColor(file) {
-  return getColorByFileExtension(file);
+  const colorBase = getColorByFileExtension(file);
+  const intensity = getColorIntensityByFile(file);
+  return `${colorBase}${intensity}`;
 }
 
 function createFile(file, id, startingX, startingY) {
