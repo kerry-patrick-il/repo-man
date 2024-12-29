@@ -1,15 +1,14 @@
 import repoInfo from "./data/repo-data";
-import { svgNamespace } from "./scripts/constants";
-import { createFolder, writeFiles } from "./scripts/filesAndFolders";
-
-
+import {
+  createFolder,
+  writeFiles,
+  createRepoLevelElement,
+} from "./scripts/filesAndFolders";
 
 window.addEventListener("load", () => {
   const svg = document.getElementById("repoView");
 
-  const g = document.createElementNS(svgNamespace, "g");
-  g.setAttribute("transform", "translate(10, 10)");
-  g.setAttribute("id", "top-level");
+  const g = createRepoLevelElement();
   svg.appendChild(g);
 
   let startingX = 0;

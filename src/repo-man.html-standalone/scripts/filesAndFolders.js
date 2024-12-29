@@ -1,10 +1,6 @@
-import { svgNamespace } from "./constants";
+import { svgNamespace } from "./common/constants";
 import { getColorByFileExtension } from "./getColorByFileExtension";
 import { getFileSizeRadius } from "./fileSize";
-
-function getStaticColor(file) {
-  return "blue";
-}
 
 let id = 0;
 
@@ -117,4 +113,11 @@ export function createFolder(folder, g, startingX, rowMaxY) {
     maxX: folderResult.maxX + startingX + 10,
     rowMaxY: folderResult.rowMaxY + 10 + 20,
   };
+}
+
+export function createRepoLevelElement() {
+  const g = document.createElementNS(svgNamespace, "g");
+  g.setAttribute("transform", "translate(10, 10)");
+  g.setAttribute("id", "top-level");
+  return g;
 }
