@@ -45,6 +45,7 @@ describe("get color intensity by revisions", () => {
     };
 
     const intensity = getColorIntensityByRevisions({ commits: 7 }, bounds);
+    expect(intensity.length).toBe(2);
     const intValue = parseInt(intensity, 16);
     expect(intValue).toBeGreaterThan(100);
     expect(intValue).toBeLessThan(255);
