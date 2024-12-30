@@ -1,21 +1,23 @@
 import repoInfo from "../data/repo-data";
 
-const maxFileSize = getMaxFileSize(repoInfo);
-const minFileSize = getMinFileSize(repoInfo);
+const maxFileSize = getMaxFileAttribute(repoInfo);
+const minFileSize = getMinFileAttribute(repoInfo);
 
-export function getMaxFileSize(repoInfo) {
+export function getMaxFileAttribute(repoInfo, attrib = "size") {
   return Math.max(
     0,
-    ...(repoInfo.files?.map((f) => f.size) ?? []),
-    ...(repoInfo.folders?.flatMap((folder) => getMaxFileSize(folder)) ?? [])
+    ...(repoInfo.files?.map((f) => f[attrib]) ?? []),
+    ...(repoInfo.folders?.flatMap((folder) => getMaxFileAttribute(folder)) ??
+      [])
   );
 }
 
-export function getMinFileSize(repoInfo) {
+export function getMinFileAttribute(repoInfo, attrib = "size") {
   return (
     Math.min(
-      ...(repoInfo.files?.map((f) => f.size) ?? []),
-      ...(repoInfo.folders?.flatMap((folder) => getMaxFileSize(folder)) ?? [])
+      ...(repoInfo.files?.map((f) => f[attrib]) ?? []),
+      ...(repoInfo.folders?.flatMap((folder) => getMaxFileAttribute(folder)) ??
+        [])
     ) ?? 0
   );
 }
