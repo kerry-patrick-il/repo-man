@@ -1,34 +1,30 @@
 import repoInfo from "../data/repo-data";
+import {
+  getMaxFileAttribute,
+  getMinFileAttribute,
+} from "./getMinMaxFileAttribute";
 
 const maxFileSize = getMaxFileAttribute(repoInfo);
 const minFileSize = getMinFileAttribute(repoInfo);
 
-export function getMaxFileAttribute(repoInfo, attrib = "size") {
-  return Math.max(
-    0,
-    ...(repoInfo.files?.map((f) => f[attrib]) ?? []),
-    ...(repoInfo.folders?.flatMap((folder) => getMaxFileAttribute(folder)) ??
-      [])
-  );
-}
-
-export function getMinFileAttribute(repoInfo, attrib = "size") {
-  return (
-    Math.min(
-      ...(repoInfo.files?.map((f) => f[attrib]) ?? []),
-      ...(repoInfo.folders?.flatMap((folder) => getMaxFileAttribute(folder)) ??
-        [])
-    ) ?? 0
-  );
-}
-
 const minRSquared = 144;
 const maxRSquared = 10000;
 
-export function getFileSizeRadius(file) {
-  if (minFileSize === maxFileSize) return 0;
+export function getFileSizeRadius(
+  file,
+  bounds = {
+    minInput: minFileSize,
+    maxInput: maxFileSize,
+    minOutput: minRSquared,
+    maxOutput: maxRSquared,
+  }
+) {
+  if (bounds.minInput === bounds.maxInput) {
+    return Math.sqrt(bounds.minOutput);
+  }
   const rSquared =
-    (file.size * (maxRSquared - minRSquared)) / (maxFileSize - minFileSize) +
-    minRSquared;
+    (file.size * (bounds.maxOutput - bounds.minOutput)) /
+      (bounds.maxInput - bounds.minInput) +
+    bounds.minOutput;
   return Math.sqrt(rSquared);
 }
