@@ -30,7 +30,7 @@ window.addEventListener("load", () => {
 });
 
 /* todo: 
- - determine intensity of color by number of revisions
+- automate the creation process of the index.html file
  - add a legend showing colors and their meanings
  - add a second file radius algorithm that uses number of revisions, and create a switch between the two algorithms
  - add a second file color algorithm that uses red to green for number of revisions, and create a switch between the two
