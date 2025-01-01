@@ -26,6 +26,7 @@ namespace repo_man.domain.DependencyInjection
             services.AddSingleton<IFileRadiusCalculator, BoundedFileRadiusCalculator>();
             services.AddSingleton<SvgChartStringBuilder>();
             services.AddSingleton<RepositoryVisualizer>();
+            services.AddSingleton<HtmlRepositoryVisualizer>();
             services.AddSingleton<FileExtensionLegendDataBuilder>();
 
             //code quality and ai

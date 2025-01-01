@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Moq.AutoMock;
 using repo_man.domain;
 using repo_man.domain.CodeQuality;
 using repo_man.xunit._extensions;
@@ -35,6 +29,17 @@ namespace repo_man.xunit.domain
             GivenAnActionOf(reviewAction);
             await WhenIRunTheRepoMan();
             _mocker.GetMock<RepositoryReviewer>().Verify(v => v.ReviewCodeQuality(), Times.Once);
+        }
+
+        [Theory]
+        [InlineData("html")]
+        [InlineData("hTmL")]
+        [InlineData("HTML")]
+        public async Task LaunchesHtmlRepoVisualizerIfConfigActionIsHtml(string htmlAction)
+        {
+            GivenAnActionOf(htmlAction);
+            await WhenIRunTheRepoMan();
+            _mocker.GetMock<HtmlRepositoryVisualizer>().Verify(v => v.GenerateDiagram(), Times.Once);
         }
 
         [Fact]

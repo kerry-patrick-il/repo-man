@@ -58,6 +58,16 @@ Below are additional configuration keys (case-sensitive) that can be passed at t
 - fileName - for setting the diagram file name, defaults to diagram.svg
 - ignoreFileTypes - a pipe-delimited list of file extensions to ignore from analysis and from the diagram. For example, passing in "png|jpg|bmp" will ignore all image files from the diagram.
 
+### html (in-progress)
+```
+.\repo-man.exe html --repo "C:\path\to\your\git\repo" --outputDir "C:\path\to\output\folder"
+```
+The html action is the next iteration of the diagram action. 
+Instead of generating an SVG file as a standalone image, it creates an HTML file with the svg element dynamically generated at view time. 
+The repo statistics are outputted as part of the action. 
+The data and the script files to generate the SVG diagram are bundled using webpack into a standalone index.html file. 
+In a future iteration, there will be toggles to dynamically update the diagram to show different attributes for color, intensity, and radius.
+
 ### review (alpha version)
 ```
 .\repo-man.exe review --repo "C:\path\to\your\git\repo"
@@ -66,7 +76,7 @@ The review action pulls historical commit data from the git repository's current
 identifying code quality risks in the repository. The report is generated using AI to analyze the data, and is intended to be a starting
 point for further investigation. The report is still early days, but with some prompt tuning could prove to be valuable. 
 
-### Config options
+#### Config options
 
 The review action only requires that you provide a repo path that points to a valid git repository.
 repo-man will analyze the repository's current branch and generate a report to the console. 
