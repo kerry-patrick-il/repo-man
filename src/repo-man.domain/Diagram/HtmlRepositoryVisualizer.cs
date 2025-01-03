@@ -8,18 +8,20 @@ public class HtmlRepositoryVisualizer
 {
     private readonly ILogger<HtmlRepositoryVisualizer> _logger;
     private readonly ITreeExtracter _extracter;
-    private readonly IDiagramRenderer _renderer;
     private readonly IConfiguration _configuration;
+    private readonly JsonGitTreeWriter _treeWriter;
+    private readonly HtmlDiagramBuilder _htmlBuilder; 
 
-    public HtmlRepositoryVisualizer(ILogger<HtmlRepositoryVisualizer> logger, ITreeExtracter extracter, IDiagramRenderer renderer, IConfiguration configuration)
+    public HtmlRepositoryVisualizer(ILogger<HtmlRepositoryVisualizer> logger, ITreeExtracter extracter, IConfiguration configuration, JsonGitTreeWriter treeWriter, HtmlDiagramBuilder htmlBuilder)
     {
         _logger = logger;
         _extracter = extracter;
-        _renderer = renderer;
         _configuration = configuration;
+        _treeWriter = treeWriter;
+        _htmlBuilder = htmlBuilder;
     }
 
-    public virtual Task GenerateDiagram()
+    public virtual async Task GenerateDiagram()
     {
         try
         {
@@ -27,8 +29,10 @@ public class HtmlRepositoryVisualizer
             var tree = _extracter.GetFileTree();
 
             _logger.LogInformation("Writing repo data to file");
+            await _treeWriter.WriteTreeToFile(tree);
 
             _logger.LogInformation("Creating a diagram of the repository file tree");
+            await _htmlBuilder.BuildHtmlFile();
 
             _logger.LogInformation("Diagram creation complete!");
         }
@@ -36,7 +40,5 @@ public class HtmlRepositoryVisualizer
         {
             _logger.LogError(ex, "Error generating diagram. Exiting.");
         }
-
-        return Task.CompletedTask;
     }
 }

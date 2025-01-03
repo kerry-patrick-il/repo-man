@@ -28,6 +28,8 @@ namespace repo_man.domain.DependencyInjection
             services.AddSingleton<RepositoryVisualizer>();
             services.AddSingleton<HtmlRepositoryVisualizer>();
             services.AddSingleton<FileExtensionLegendDataBuilder>();
+            services.AddSingleton<JsonGitTreeWriter>();
+            services.AddSingleton<HtmlDiagramBuilder>();
 
             //code quality and ai
             services.AddSingleton<ICodeQualityAnalyst, LlmCodeQualityAnalyst>();
